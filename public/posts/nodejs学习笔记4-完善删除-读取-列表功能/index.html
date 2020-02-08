@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.64.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nodejs学习笔记4 完善删除 读取 列表功能 &middot; My New Node.js Site</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://localhost:3000/"><h1>My New Node.js Site</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://localhost:3000/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2020. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nodejs学习笔记4 完善删除 读取 列表功能</h1>
+  <time datetime=2020-02-08T15:39:31&#43;0800 class="post-date">Sat, Feb 8, 2020</time>
+  <h1 id="完善删除读取列表功能">完善删除、读取、列表功能</h1>
+<p><em>阅读这篇blog大概需要10分钟</em></p>
+<p>之前通过文件操作，实现了最基本的增加一个Note的功能，下面会继续完善这个小例子，增加删除、读取、列表功能。</p>
+<ul>
+<li>数组的filter。</li>
+<li>通过callback来设计函数。</li>
+</ul>
+<blockquote>
+<p>“People think that computer science is the art of geniuses but the actual reality is the opposite, just many people doing things that build on each other, like a wall of mini stones.”  —Donald Knuth</p>
+</blockquote>
+<h2 id="介绍">介绍</h2>
+<p>废话不多说，直接上干货。
+今天主要内容包括：</p>
+<ol>
+<li>重复标题的记录</li>
+<li>删除</li>
+<li>读取</li>
+<li>列表</li>
+<li>功能演示</li>
+<li>小结</li>
+</ol>
+<h2 id="重复标题的记录">重复标题的记录</h2>
+<p>之前的代码有个小问题，没有对重复的标题做检查。</p>
+<p>可以通过数组的filter方法，来查询传入的新标题是否已经存在，如果不存在的话才会新增一条记录。</p>
+<p>代码如下:</p>
+<pre><code>const duplicateNote = notes.filter(
+                note =&gt; note.title === title
+            );
+
+            if (duplicateNote.length === 0) {
+                notes.push(note);
+            }
+
+            saveNotes(notes);
+</code></pre><p>注意传入filter()的是一个匿名函数，这是闭包的写法，简洁明了。
+注意闭包如果只有一个参数的话，可以省略括号。</p>
+<h2 id="删除">删除</h2>
+<p>删除记录的逻辑也可以利用filter方法，过滤掉查询记录，然后保存：</p>
+<pre><code>const filterNotes = notes.filter(
+                note =&gt; note.title != title
+            );
+            
+            saveNotes(filterNotes);
+</code></pre><h2 id="读取">读取</h2>
+<p>对于读取的getNote方法，由于readFile是异步函数。所以在参数里用了一个callback。通过readFile将结果传递给callback：</p>
+<p>notes.js:</p>
+<pre><code>const getNote = (title, callback) =&gt; {
+
+    fs.readFile('notes.json', (err, data) =&gt; {
+        if (err) {
+            console.log('read file error');
+            callback(err);
+        } else {
+            const notes = JSON.parse(data);
+
+            const note = notes.filter(
+                note =&gt; note.title === title
+            );
+            
+            callback(undefined, note);
+            
+        }
+    });
+};
+</code></pre><p>那么对于调用getNote的话，在app.js中就是这样：</p>
+<pre><code>notes.getNote(argv.title, (err, result) =&gt; {
+        if (err) {
+            console.log('get note err!');
+        } else {
+            if (result.length === 1) {
+                console.log(result[0]);
+            } else {
+                console.log(`could not find ${argv.title}!` );
+            }
+        }
+    });
+</code></pre><p>这种传递 callback的写法在Node中非常常见。</p>
+<h2 id="列表">列表</h2>
+<p>也是通过一个callback获取结果，和刚刚类似：</p>
+<pre><code>const getAll = (callback) =&gt; {
+    fs.readFile('notes.json', (err, data) =&gt; {
+        if (err) {
+            console.log('read file error');
+            callback(err);
+        } else {
+            const notes = JSON.parse(data);
+
+            callback(undefined, notes);
+            
+        }
+    });
+}
+</code></pre><h2 id="功能演示">功能演示</h2>
+<ol>
+<li>增加：</li>
+</ol>
+<pre><code>node app.js add --title 'abc3' --body 'this is test'
+</code></pre><p>notes.json:</p>
+<pre><code>[{&quot;title&quot;:&quot;abc1&quot;,&quot;body&quot;:&quot;this is test&quot;},{&quot;title&quot;:&quot;abc2&quot;,&quot;body&quot;:&quot;this is test&quot;},{&quot;title&quot;:&quot;abc3&quot;,&quot;body&quot;:&quot;this is test&quot;}]
+</code></pre>
+<ol start="2">
+<li>删除:</li>
+</ol>
+<pre><code>node app.js remove --title 'abc3' --body 'this is test'
+</code></pre><p>notes.json:</p>
+<pre><code>[{&quot;title&quot;:&quot;abc1&quot;,&quot;body&quot;:&quot;this is test&quot;},{&quot;title&quot;:&quot;abc2&quot;,&quot;body&quot;:&quot;this is test&quot;}]
+</code></pre>
+<ol start="3">
+<li>读取:</li>
+</ol>
+<pre><code>node app.js read --title 'abc1'
+
+</code></pre><p>输出:</p>
+<pre><code>Starting notes.js
+Starting app
+{ title: 'abc1', body: 'this is test' }
+</code></pre><ol start="4">
+<li>列表:</li>
+</ol>
+<pre><code>node app.js list
+</code></pre><p>输出:</p>
+<pre><code>Starting notes.js
+Starting app
+[
+  { title: 'abc1', body: 'this is test' },
+  { title: 'abc2', body: 'this is test' }
+]
+</code></pre><h2 id="小结">小结</h2>
+<p>通过一个非常简单的小例子，通过文件读写JSON对象的方式，完成了对Note的简单增加、删除、查询、列表的功能。</p>
+<p>在文件读写的操作中，都是通过了标准异步的方式来完成的。通过这个例子，了解到了闭包、常见的callback使用方式。</p>
+<h2 id="项目代码">项目代码</h2>
+<p><a href="https://github.com/rangwei/nodejs-blogs/tree/master/a04">nodejs-blogs/a04</a></p>
+<h2 id="参考阅读">参考阅读</h2>
+<ul>
+<li><a href="http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/">Understand JavaScript Callback Functions and Use Them</a></li>
+<li><a href="http://callbackhell.com">Callback Hell</a></li>
+<li><a href="https://eloquentjavascript.net/">eloquentjavascript</a></li>
+</ul>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

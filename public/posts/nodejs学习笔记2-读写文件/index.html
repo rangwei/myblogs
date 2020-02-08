@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.64.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nodejs学习笔记2 读写文件 &middot; My New Node.js Site</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://localhost:3000/"><h1>My New Node.js Site</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://localhost:3000/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2020. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nodejs学习笔记2 读写文件</h1>
+  <time datetime=2020-02-08T15:38:49&#43;0800 class="post-date">Sat, Feb 8, 2020</time>
+  <h1 id="读写文件功能">读写文件功能</h1>
+<p><em>阅读这篇blog大概需要10分钟</em></p>
+<p>通过require来引入标准的模块功能来实现一些高级功能。</p>
+<ul>
+<li>如何读写文件</li>
+<li>如何使用模块来组织代码</li>
+</ul>
+<blockquote>
+<p>方法在JavaScript中属于一等公民，和字符串、数字等类型是完全一样的。可以通过变量传递。</p>
+</blockquote>
+<h2 id="介绍">介绍</h2>
+<p>学习用文件模块来进行读写操作，了解callback方法的使用。</p>
+<ol>
+<li>使用文件模块FileSystem</li>
+<li>module变量</li>
+<li>通过module.export导出方法</li>
+<li>通过命令来写入文件内容</li>
+<li>小结</li>
+</ol>
+<h2 id="准备">准备</h2>
+<p>创建一个新的项目a02，并用npm初始化。</p>
+<pre><code>npm init -y
+</code></pre><h2 id="使用filesystem模块">使用FileSystem模块</h2>
+<p>可以通过require(&lsquo;fs&rsquo;)语法来引用标准模块。</p>
+<p>关于FileSystem模块的文档：
+<a href="https://nodejs.org/api/fs.html#fs_fs_appendfile_path_data_options_callback">fs.appendFile</a></p>
+<p>app.js代码:</p>
+<pre><code>const fs = require('fs');
+
+console.log('Starting app');
+
+fs.appendFile('message.txt', 'Hello world!', err =&gt; {
+    if (err) {
+        console.log('write file error!');
+    }
+});
+
+console.log('Finishing app');
+</code></pre><p>fs.appendFile()方法第三个参数是callback的异步函数,这里使用了箭头函数的语法格式。在Node应用中大部分方法都会是这样的风格，这就是Node强大的地方。通过异步I/O的方式极大的提高了效率。</p>
+<p>读取文件的方法是fs.readFile(path[, options], callback),使用方法类似。</p>
+<h2 id="module变量">module变量</h2>
+<p>我们的代码可以访问module这个变量，查看module：</p>
+<pre><code>console.log('Starting app');
+
+console.log(module);
+
+</code></pre><p>可以看到类似像这样的输出：</p>
+<pre><code>Starting app
+Module {
+  id: '.',
+  path: '/Users/user/Documents/projects/apps/node/blogs/a02',
+  exports: {},
+  parent: null,
+  filename: '/Users/user/Documents/projects/apps/node/blogs/a02/module.js',
+  loaded: false,
+  children: [],
+  paths: [
+    '/Users/user/Documents/projects/apps/node/blogs/a02/node_modules',
+    '/Users/user/Documents/projects/apps/node/blogs/node_modules',
+    '/Users/user/Documents/projects/apps/node/node_modules',
+    '/Users/user/Documents/projects/apps/node_modules',
+    '/Users/user/Documents/projects/node_modules',
+    '/Users/user/Documents/node_modules',
+    '/Users/user/node_modules',
+    '/Users/node_modules',
+    '/node_modules'
+  ]
+}
+</code></pre><h2 id="通过moduleexport导出方法">通过module.export导出方法</h2>
+<p>创建一个新的文件notes.js:</p>
+<pre><code>console.log('Starting notes.js');
+
+module.exports.addNote = () =&gt; {
+    console.log('add note');
+    return 'new note';
+};
+</code></pre><p>然后app.js可以通过require来引入：</p>
+<pre><code>const fs = require('fs');
+const notes = require('./notes');
+
+console.log('Starting app');
+
+console.log(notes.addNote());
+
+</code></pre><p>运行以后的输出：</p>
+<pre><code>Starting notes.js
+Starting app
+add note
+new note
+</code></pre><p>可以看到require()会在应用最开始自动运行。
+然后运行addNote()</p>
+<h2 id="通过命令来写入文件内容">通过命令来写入文件内容</h2>
+<p>process变量包含了命令参数。可以通过下面的代码测试：</p>
+<pre><code>console.log(process.argv);
+</code></pre><p>通过命令行运行app.js,并加入两个参数。</p>
+<pre><code>node app.js add test
+</code></pre><p>&lsquo;add'和&rsquo;test'分别可以通过process.argv[2]和process.argv[3]读取。</p>
+<p>修改相应代码，可以完成通过命令来写入文件的功能。</p>
+<p>app.js:</p>
+<pre><code>const command = process.argv[2];
+
+const body = process.argv[3];
+
+if (command == 'add') {
+    notes.addNote(body);
+}
+</code></pre><p>notes.js:</p>
+<pre><code>module.exports.addNote = (body) =&gt; {
+
+    console.log('add note');
+
+    fs.appendFile('notes.txt', body, err =&gt; {
+        if (err) {
+            console.log('write file error!');
+        }
+    });
+    return 'new note';
+};
+</code></pre><p>测试程序:</p>
+<pre><code>node app.js add test
+</code></pre><p>可以看到内容写入了文件。</p>
+<h2 id="小结">小结</h2>
+<p>Node通过标准和第三方模块提供了各种强大的功能，让编写代码变得非常简单，JavaScript最新的语法用起来也非常方便。后面我会使用Json对象来保存数据。</p>
+<h2 id="项目代码">项目代码</h2>
+<p><a href="https://github.com/rangwei/nodejs-blogs/tree/master/a02">nodejs-blogs/a02</a></p>
+<h2 id="参考阅读">参考阅读</h2>
+<ul>
+<li>
+<p><a href="https://nodejs.org/api/index.html">Node.js 文档</a></p>
+</li>
+<li>
+<p><a href="https://nick.scialli.me/first-class-functions-in-javascript/">First-Class Functions in JavaScript</a></p>
+</li>
+</ul>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

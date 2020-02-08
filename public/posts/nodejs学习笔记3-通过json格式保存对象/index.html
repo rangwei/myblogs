@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.64.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nodejs学习笔记3 通过JSON格式保存对象 &middot; My New Node.js Site</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://localhost:3000/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://localhost:3000/"><h1>My New Node.js Site</h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://localhost:3000/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2020. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nodejs学习笔记3 通过JSON格式保存对象</h1>
+  <time datetime=2020-02-08T15:39:05&#43;0800 class="post-date">Sat, Feb 8, 2020</time>
+  <h1 id="通过json格式保存对象">通过JSON格式保存对象</h1>
+<p><em>阅读这篇blog大概需要10分钟</em></p>
+<p>继续完善前面的小例子，通过命令参数来传递内容，并通过JSON格式来保存数据。</p>
+<ul>
+<li>通过第三方yargs包来处理参数</li>
+<li>JSON格式操作</li>
+</ul>
+<blockquote>
+<p>any application that can be written in JavaScript, will eventually be written in JavaScript. &ndash; Atwood定律</p>
+</blockquote>
+<h2 id="介绍">介绍</h2>
+<p>继续通过文件读写的功能来完善保存数据的功能。通过JSON来操作，这也是Node后端应用的优势，前后端一致、处理方便快捷：</p>
+<ol>
+<li>安装使用yargs包</li>
+<li>完善add note功能</li>
+<li>JSON对象</li>
+</ol>
+<h2 id="安装使用yargs包">安装使用yargs包</h2>
+<p>在终端输入命令：</p>
+<pre><code>npm install yargs --save
+</code></pre><p>可以看到yargs的module自动下载安装，并且自动更新了package.json配置文件。</p>
+<p>yarg的使用很简单，输入参数会保存在argv变量中。</p>
+<pre><code>const yargs = require('yargs');
+...
+console.log(yargs.argv);
+</code></pre><p>增加参数测试：</p>
+<pre><code>node app.js add --title 'abc'
+</code></pre><p>输出:</p>
+<pre><code>Starting notes.js
+Starting app
+{ _: [ 'add' ], title: 'abc', '$0': 'app.js' }
+</code></pre><h2 id="完善add-note功能">完善add note功能</h2>
+<p>通过yargs._[0]获取命令，然后分别通过argv.title和argv.body获取标题和内容:</p>
+<p>app.js:</p>
+<pre><code>const argv = yargs.argv;
+const command = argv._[0];
+...
+notes.addNote(argv.title, argv.body);
+</code></pre><p>然后就可以这样来运行程序了：</p>
+<pre><code>node app.js add --title 'abc' --body 'this is test'
+</code></pre><h2 id="json对象">JSON对象</h2>
+<p>JSON是JavaScript Object Notation的缩写。在Web应用中使用很广泛。
+可以通过标准的JSON函数在JSON对象和字符串之间转换：</p>
+<p>测试代码：</p>
+<pre><code>const obj = {name: 'andy'};
+const stringObj = JSON.stringify(obj);
+
+console.log(typeof stringObj);// string
+console.log(stringObj); //{&quot;name&quot;:&quot;andy&quot;}
+
+const person = JSON.parse(stringObj);
+console.log(typeof person); //object
+console.log(person); //{ name: 'andy' }
+</code></pre><h2 id="通过json格式来保存读取数据">通过JSON格式来保存读取数据</h2>
+<ol>
+<li>首先通过readFile()读取现有的数据，转化为JSON对象。</li>
+<li>通过push()增加一个note。</li>
+<li>将JSON对象转化为字符串，然后通过writeFile()写入数据。</li>
+</ol>
+<p>notes.js:</p>
+<pre><code>const fs = require('fs');
+
+console.log('Starting notes.js');
+
+const addNote = (title, body) =&gt; {
+
+    fs.readFile('notes.json', (err, data) =&gt; {
+        if (err) {
+            console.log('read file error');
+        } else {
+            const notes = JSON.parse(data);
+
+            const note = {title, body};
+
+            notes.push(note);
+
+            fs.writeFile('notes.json', JSON.stringify(notes), err =&gt; {
+                if (err) {
+                    console.log('write file error!');
+                } else {
+                    console.log('add note successfully!')
+                }
+            });
+        }
+    });
+
+};
+
+module.exports = {
+    addNote
+}
+</code></pre><p>运行程序，通过参数传递标题和内容：</p>
+<pre><code>node app.js add --title 'abc' --body 'this is test'
+</code></pre><p>然后查看保存的JSON数据notes.json：</p>
+<pre><code>[{&quot;title&quot;:&quot;abc&quot;,&quot;body&quot;:&quot;this is test&quot;},{&quot;title&quot;:&quot;abc&quot;,&quot;body&quot;:&quot;this is test&quot;}]
+</code></pre>
+<p>注意readFile()和writeFile()都是异步函数，这里通过嵌套的方式来完成。代码可读性不是特别好。</p>
+<p>现在JS有很多不同的方式来改进这一点，有Promise，还有async/await，后面可以开专题学习一下。</p>
+<h2 id="小结">小结</h2>
+<p>Node有完善的生态，大量的标准和第三方模块可以直接使用，非常方便。所有的I/O都支持通过异步来调用，可以快速高效地响应用户。</p>
+<h2 id="项目代码">项目代码</h2>
+<p><a href="https://github.com/rangwei/nodejs-blogs/tree/master/a03">nodejs-blogs/a03</a></p>
+<h2 id="参考阅读">参考阅读</h2>
+<ul>
+<li><a href="https://www.npmjs.com/package/yargs">yargs</a></li>
+<li><a href="https://zh.javascript.info/callbacks">callback</a></li>
+</ul>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "quickstart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rangwei/blogs-quickstart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rangwei/blogs-quickstart/issues"
+  },
+  "homepage": "https://github.com/rangwei/blogs-quickstart#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on My New Node.js Site</title>
+    <link>http://localhost:3000/posts/</link>
+    <description>Recent content in Posts on My New Node.js Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 08 Feb 2020 15:39:31 +0800</lastBuildDate>
+    
+	<atom:link href="http://localhost:3000/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Nodejs学习笔记4 完善删除 读取 列表功能</title>
+      <link>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-%E5%AE%8C%E5%96%84%E5%88%A0%E9%99%A4-%E8%AF%BB%E5%8F%96-%E5%88%97%E8%A1%A8%E5%8A%9F%E8%83%BD/</link>
+      <pubDate>Sat, 08 Feb 2020 15:39:31 +0800</pubDate>
+      
+      <guid>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-%E5%AE%8C%E5%96%84%E5%88%A0%E9%99%A4-%E8%AF%BB%E5%8F%96-%E5%88%97%E8%A1%A8%E5%8A%9F%E8%83%BD/</guid>
+      <description>完善删除、读取、列表功能 阅读这篇blog大概需要10分钟
+之前通过文件操作，实现了最基本的增加一个Note的功能，下面会继续完善这个小例子，增加删除、读取、列表功能。
+ 数组的filter。 通过callback来设计函数。   “People think that computer science is the art of geniuses but the actual reality is the opposite, just many people doing things that build on each other, like a wall of mini stones.” —Donald Knuth
+ 介绍 废话不多说，直接上干货。 今天主要内容包括：
+ 重复标题的记录 删除 读取 列表 功能演示 小结  重复标题的记录 之前的代码有个小问题，没有对重复的标题做检查。
+可以通过数组的filter方法，来查询传入的新标题是否已经存在，如果不存在的话才会新增一条记录。
+代码如下:
+const duplicateNote = notes.filter( note =&amp;gt; note.title === title ); if (duplicateNote.</description>
+    </item>
+    
+    <item>
+      <title>Nodejs学习笔记3 通过JSON格式保存对象</title>
+      <link>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-%E9%80%9A%E8%BF%87json%E6%A0%BC%E5%BC%8F%E4%BF%9D%E5%AD%98%E5%AF%B9%E8%B1%A1/</link>
+      <pubDate>Sat, 08 Feb 2020 15:39:05 +0800</pubDate>
+      
+      <guid>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-%E9%80%9A%E8%BF%87json%E6%A0%BC%E5%BC%8F%E4%BF%9D%E5%AD%98%E5%AF%B9%E8%B1%A1/</guid>
+      <description>通过JSON格式保存对象 阅读这篇blog大概需要10分钟
+继续完善前面的小例子，通过命令参数来传递内容，并通过JSON格式来保存数据。
+ 通过第三方yargs包来处理参数 JSON格式操作   any application that can be written in JavaScript, will eventually be written in JavaScript. &amp;ndash; Atwood定律
+ 介绍 继续通过文件读写的功能来完善保存数据的功能。通过JSON来操作，这也是Node后端应用的优势，前后端一致、处理方便快捷：
+ 安装使用yargs包 完善add note功能 JSON对象  安装使用yargs包 在终端输入命令：
+npm install yargs --save 可以看到yargs的module自动下载安装，并且自动更新了package.json配置文件。
+yarg的使用很简单，输入参数会保存在argv变量中。
+const yargs = require(&#39;yargs&#39;); ... console.log(yargs.argv); 增加参数测试：
+node app.js add --title &#39;abc&#39; 输出:
+Starting notes.js Starting app { _: [ &#39;add&#39; ], title: &#39;abc&#39;, &#39;$0&#39;: &#39;app.js&#39; } 完善add note功能 通过yargs.</description>
+    </item>
+    
+    <item>
+      <title>Nodejs学习笔记2 读写文件</title>
+      <link>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Sat, 08 Feb 2020 15:38:49 +0800</pubDate>
+      
+      <guid>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/</guid>
+      <description>读写文件功能 阅读这篇blog大概需要10分钟
+通过require来引入标准的模块功能来实现一些高级功能。
+ 如何读写文件 如何使用模块来组织代码   方法在JavaScript中属于一等公民，和字符串、数字等类型是完全一样的。可以通过变量传递。
+ 介绍 学习用文件模块来进行读写操作，了解callback方法的使用。
+ 使用文件模块FileSystem module变量 通过module.export导出方法 通过命令来写入文件内容 小结  准备 创建一个新的项目a02，并用npm初始化。
+npm init -y 使用FileSystem模块 可以通过require(&amp;lsquo;fs&amp;rsquo;)语法来引用标准模块。
+关于FileSystem模块的文档： fs.appendFile
+app.js代码:
+const fs = require(&#39;fs&#39;); console.log(&#39;Starting app&#39;); fs.appendFile(&#39;message.txt&#39;, &#39;Hello world!&#39;, err =&amp;gt; { if (err) { console.log(&#39;write file error!&#39;); } }); console.log(&#39;Finishing app&#39;); fs.appendFile()方法第三个参数是callback的异步函数,这里使用了箭头函数的语法格式。在Node应用中大部分方法都会是这样的风格，这就是Node强大的地方。通过异步I/O的方式极大的提高了效率。
+读取文件的方法是fs.readFile(path[, options], callback),使用方法类似。
+module变量 我们的代码可以访问module这个变量，查看module：
+console.log(&#39;Starting app&#39;); console.log(module); 可以看到类似像这样的输出：
+Starting app Module { id: &#39;.&#39;, path: &#39;/Users/user/Documents/projects/apps/node/blogs/a02&#39;, exports: {}, parent: null, filename: &#39;/Users/user/Documents/projects/apps/node/blogs/a02/module.</description>
+    </item>
+    
+    <item>
+      <title>Nodejs学习笔记1 快速开始</title>
+      <link>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</link>
+      <pubDate>Sat, 08 Feb 2020 15:38:24 +0800</pubDate>
+      
+      <guid>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</guid>
+      <description>快速开始 阅读这篇Blog大概需要5分钟
+Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境。 Node.js 使用了一个事件驱动、非阻塞式 I/O 的模型。
+对于云应用的快速开发，学习并熟练掌握Node已经是一项全栈开发工程师的必备技能。
+我计划用一个月时间快速学习Node.js。这是第一篇学习笔记。主要内容：
+ Hello World.   天下武功，唯快不破。
+ 介绍 这篇笔记主要包含的内容：
+ 安装环境 创建项目 创建并运行程序 小结  安装环境 在mac下安装node.js环境非常简单：
+brew install node node -v 可以看到安装后的node版本，像这样:
+v12.11.1 创建项目 快速创建一个node.js项目，通过npm init初始化一个项目，用-y的参数默认全部yes：
+mkdir a01 cd a01 npm init -y 创建并运行程序  在当前目录下创建app.js  console.log(&#39;Hello world!&#39;); 运行代码 在命令行下输入：  node app.js 可以看到输出：
+Hello world! 小结 创建并运行一个Node app非常快速和简单。
+node程序是基于Javascript的，JS是目前最流行的编程语言，学习了解JS的基本语法对学习了解Node有很大的帮助。
+参考阅读   初识Node.</description>
+    </item>
+    
+  </channel>
+</rss>
