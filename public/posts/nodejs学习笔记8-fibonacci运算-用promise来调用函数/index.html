@@ -109,6 +109,7 @@ http://localhost:8124?n=80
 <p>会发现响应逐渐变慢，电脑的CPU很高，然后其它请求也会得不到回应，这是因为Node.js是单线程的。它的优势是I/O非阻塞，但是对于CPU计算多的任务，Node就不适合了。</p>
 <p>有一些改进的办法，比如新开线程、对算法进行优化，但是个人觉得还是应该在设计上去避免，尽量发挥Node的强项避免它的弱项</p>
 <h2 id="utilpromisify">util.promisify</h2>
+<p>Node.js生态大多数异步函数都是通过callback的方法来实现的。utilt提供了promisify方法来将传统的callback函数转化为promise写法，示例：</p>
 <p>ls.js:</p>
 <pre><code>const fs = require('fs');
 const util = require('util');
@@ -122,6 +123,7 @@ const fs_readdir = util.promisify(fs.readdir);
     }
 })().catch(err =&gt; {console.log(err)});
 </code></pre><h2 id="promise-module">promise module</h2>
+<p>从Node10开始标准库也提供了promise版本，比如Filesystem，使用方法很简单，只要在引入的时候加上.promise即可，示例:</p>
 <p>ls2-promise.js:</p>
 <pre><code>const fs = require('fs').promises;
 
