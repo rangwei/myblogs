@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.64.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nodejs学习笔记6 网络请求和API调用 &middot; My New Node.js Site</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://whispering-coast-84700.herokuapp.com/"><h1>My New Node.js Site</h1></a>
+      <p class="lead">
+       This is my learning notes for Node.js 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://whispering-coast-84700.herokuapp.com/">Home</a> </li>
+        <li><a href="https://github.com/rangwei/"> Github </a></li><li><a href="https://www.linkedin.com/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2020. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nodejs学习笔记6 网络请求和API调用</h1>
+  <time datetime=2020-02-08T16:40:53&#43;0800 class="post-date">Sat, Feb 8, 2020</time>
+  <h1 id="网络请求和api调用">网络请求和API调用</h1>
+<p><em>阅读这篇blog大约需要10分钟</em></p>
+<p>网络编程是非常重要的一块内容，JS作为web开发最紧密的一部分，在网络编程方面本来就是很强大的，然后Node生态也提供了各种便利的工具来发送和接收网络请求。</p>
+<p>我们最基本的工具是Request模块，然后第三方也提供基于Promise的工具，常用的有axios,node-fetch等。</p>
+<ul>
+<li>Request</li>
+<li>axios</li>
+<li>node-fetch</li>
+</ul>
+<blockquote>
+<p>Resources for developers, by developers.</p>
+</blockquote>
+<h2 id="介绍">介绍</h2>
+<p>先通过几个小例子来coding体验一下不同：</p>
+<ol>
+<li>Request</li>
+<li>Web RESTful API</li>
+<li>axios</li>
+<li>node-fetch</li>
+</ol>
+<h2 id="request">Request</h2>
+<ol>
+<li>介绍
+Request是一个超级简单使用的HTTP Client工具。
+它的目标是通过最简单的方法来发送http请求。</li>
+</ol>
+<p>安装Request模块:</p>
+<pre><code>npm install request --save
+</code></pre><ol start="2">
+<li>最基本的用法：</li>
+</ol>
+<pre><code>var req = require('request');
+
+req('http://www.bing.com', function(error, response, body){
+    if (!error &amp;&amp; response.statusCode == 200) {
+        console.log(body) // Show the HTML for the baidu homepage.
+      }
+});
+</code></pre><p>Request通过callback来异步传输数据，现在有很多其它更强大的工具来帮助完成工作。</p>
+<h2 id="web-restful-api">Web RESTful API</h2>
+<ol>
+<li>RESTful</li>
+</ol>
+<p>rest是REpresentational State Transfer三个单词的缩写，由Roy Fielding于2000年论文中提出，它代表着分布式服务的架构风格。</p>
+<ol start="2">
+<li>Demo API:</li>
+</ol>
+<p>接下来使用这个示例api来demo应用：</p>
+<pre><code>https://reqres.in/api/users
+</code></pre>
+<p>查询某一个用户的数据：</p>
+<pre><code>https://reqres.in/api/users/1
+</code></pre>
+<p>返回结果：</p>
+<pre><code>{
+    &quot;data&quot;: {
+        &quot;id&quot;: 1,
+        &quot;email&quot;: &quot;george.bluth@reqres.in&quot;,
+        &quot;first_name&quot;: &quot;George&quot;,
+        &quot;last_name&quot;: &quot;Bluth&quot;,
+        &quot;avatar&quot;: &quot;https://s3.amazonaws.com/uifaces/faces/twitter/calebogden/128.jpg&quot;
+    }
+}
+</code></pre><p>假设我们需要先通过用户id查询到基本数据，然后根据avatar这个字段保存的url来获取用户头像。</p>
+<p>下面看看如何通过axios和node-fetch来完成这个功能。</p>
+<h2 id="axios">axios</h2>
+<ol>
+<li>介绍
+Node.js里面非常有名的基于Promise的HTTP Client，简单易用高效。
+主要的特性有支持Promise，自动转化JSON数据等、支持拦截器、丰富的配置项。目前使用非常广泛。</li>
+</ol>
+<p>安装axios模块:</p>
+<pre><code>npm install axios --save
+</code></pre><ol start="2">
+<li>通过aysnc/await</li>
+</ol>
+<p>axios_demo.js:</p>
+<pre><code>const axios = require('axios');
+const fs = require('fs');
+const url = 'https://reqres.in/api/users';
+
+const getPicByUser = async user =&gt; {
+
+    try {
+        const userResponse = await axios.get(url + '/' + user);
+
+        const picResponse = await axios(
+            {
+                url: userResponse.data.data.avatar,
+                method: 'GET',
+                responseType: 'stream'
+            }
+        );
+
+        const writer = fs.createWriteStream('./avatar.jpg');
+        picResponse.data.pipe(writer);
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+getPicByUser(1);
+</code></pre><p>看起来非常简单，和同步代码的语法差不多了。首先获取某个用户的数据，然后根据avatar查询到头像地址，最后写入文件保存。</p>
+<ol start="3">
+<li>通过promise.then的语法
+也可以通过Promise链的方式来完成刚刚的功能：</li>
+</ol>
+<pre><code>axios.get(url + '/1')
+    .then(userResponse =&gt; axios({
+        url: userResponse.data.data.avatar,
+        method: 'GET',
+        responseType: 'stream'
+    }), err =&gt; console.log(err))
+    .then(picResponse =&gt; {
+        const writer = fs.createWriteStream('./avatar.jpg');
+        picResponse.data.pipe(writer);
+    }, err =&gt; console.log(err));
+
+</code></pre><h2 id="node-fetch">node-fetch</h2>
+<p>1.介绍
+Node.js版本的Fetch工具。</p>
+<p>安装node-fetch:</p>
+<pre><code>npm install node-fetch --save
+</code></pre><ol start="2">
+<li>通过aysnc/await</li>
+</ol>
+<p>fetch_demo.js:</p>
+<pre><code>const fetch = require('node-fetch');
+const fs = require('fs');
+
+
+const url = 'https://reqres.in/api/users';
+
+const getPicByUser = async(user) =&gt; {
+
+    let userResponse = await fetch(url + '/' + user);
+
+    let userData = await userResponse.json();
+
+    let picResponse = await fetch(userData.data.avatar);
+
+    const writer = fs.createWriteStream('./avatar.jpg');
+    
+    picResponse.body.pipe(writer);
+
+}
+
+getPicByUser(1);
+</code></pre><p>大致和上面的代码很像，由于通过await关键字，所以没有了callback嵌套的格式。</p>
+<ol start="3">
+<li>通过promise.then的语法</li>
+</ol>
+<pre><code>fetch(url + '/1')
+.then(respone =&gt; respone.json())
+.then(userData =&gt; fetch(userData.data.avatar))
+.then(picResponse =&gt; {
+    const writer = fs.createWriteStream('./avatar.jpg');
+    picResponse.body.pipe(writer);
+});
+</code></pre><h2 id="小结">小结</h2>
+<p>可以看到通过Node.js来实现网络请求的发送接收是超级方便的，在不同的系统之间调用RESTFul API也很简单。这也是个人最喜欢的一方面。</p>
+<h2 id="项目代码">项目代码</h2>
+<ul>
+<li><a href="https://github.com/rangwei/nodejs-blogs/tree/master/a06">nodejs-blogs/a06</a></li>
+</ul>
+<h2 id="参考阅读">参考阅读</h2>
+<ul>
+<li><a href="https://www.npmjs.com/package/request">https://www.npmjs.com/package/request</a></li>
+<li><a href="https://www.npmjs.com/package/axios">https://www.npmjs.com/package/axios</a></li>
+<li><a href="https://www.npmjs.com/package/node-fetch">https://www.npmjs.com/package/node-fetch</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch">https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch</a></li>
+</ul>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

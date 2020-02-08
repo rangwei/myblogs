@@ -2,3 +2,13 @@ baseURL = "https://whispering-coast-84700.herokuapp.com/"
 languageCode = "en-us"
 title = "My New Node.js Site"
 theme = "hyde"
+
+[Menus]
+  main = [
+      {Name = "Github", URL = "https://github.com/rangwei/"},
+      {Name = "LinkedIn", URL = "https://www.linkedin.com/"}
+  ]
+
+  [params]
+  description = "This is my learning notes for Node.js"
+  themeColor = "theme-base-08"

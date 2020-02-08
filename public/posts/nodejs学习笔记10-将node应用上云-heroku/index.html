@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.64.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nodejs学习笔记10 将Node应用上云 Heroku &middot; My New Node.js Site</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://whispering-coast-84700.herokuapp.com/"><h1>My New Node.js Site</h1></a>
+      <p class="lead">
+       This is my learning notes for Node.js 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://whispering-coast-84700.herokuapp.com/">Home</a> </li>
+        <li><a href="https://github.com/rangwei/"> Github </a></li><li><a href="https://www.linkedin.com/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2020. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nodejs学习笔记10 将Node应用上云 Heroku</h1>
+  <time datetime=2020-02-08T16:43:39&#43;0800 class="post-date">Sat, Feb 8, 2020</time>
+  <h1 id="将nodejs应用上云heroku">将Node.js应用上云(heroku)</h1>
+<p><em>阅读这篇blog大约需要10分钟</em></p>
+<p>前面学习了Node.js开发的基本概念。
+也了解了最流行的虚拟化技术Docker本地部署的方法。</p>
+<p>今天尝试一下把Node REST API服务上云。用一个很简单但是又非常先进的方法，那就是heroku。网址：www.heroku.com</p>
+<p>Heroku是一个支持多种编程语言的云平台即服务。在2010年被Salesforce.com收购。Heroku作为最开始的云平台之一，从2007年6月起开发，当时它仅支持Ruby，但后来增加了对Java、Node.js、Scala、Clojure、Python以及（未记录在正式文件上）PHP和Perl的支持。</p>
+<p>业界有很多云平台（PaaS），SAP也提供了SAP云平台,可以提升企业级开发创新能力。PaaS为开发者提供了很多便利的服务，屏蔽了IaaS的复杂操作，能够让开发人员最短的时间内专注于业务，进行创新。</p>
+<p>选择Heroku，主要是它提供了一些免费的服务，可以把相对简单的服务/app/网站快速上云，然后也可以对比一下它和SAP云平台的差异。</p>
+<blockquote>
+<p>Good code is its own best documentation. As you’re about to add a comment, ask yourself, “How can I improve the code so that this comment isn’t needed?” &ndash;Steve McConnell</p>
+</blockquote>
+<p>主要通过以下简单的几个步骤，就可以快速把服务上云：</p>
+<ol>
+<li>准备工作</li>
+<li>Node.js项目准备</li>
+<li>上传到GitHub</li>
+<li>安装Heroku命令工具和部署</li>
+<li>测试云服务</li>
+</ol>
+<h2 id="准备工作">准备工作</h2>
+<ul>
+<li>Git</li>
+</ul>
+<p>电脑上需要安装git，并熟悉git的基本操作</p>
+<ul>
+<li>Heroku</li>
+</ul>
+<p>首先需要注册一个账号。推荐通过Gmail注册即可，立即生效。</p>
+<h2 id="nodejs项目准备">Node.js项目准备</h2>
+<p>借用上一个项目的代码。很简单的通过JSON返回一个用户的数据。</p>
+<p>稍微做一下小小的调整：修改端口号的代码。</p>
+<p>server.js:</p>
+<pre><code>const data = require('./data');
+const express = require('express');
+
+const PORT = process.env.PORT || 3000;
+
+const app = express();
+
+app.get('/user', (req, res) =&gt; {
+    res.send(data);
+});
+
+app.listen(PORT);
+</code></pre><p>端口号码使用了环境变量，运行的时候就是云服务器上的端口号。</p>
+<h2 id="上传到github">上传到github</h2>
+<p>在github上创建一个项目，然后上传：</p>
+<pre><code>echo &quot;# heroku01&quot; &gt;&gt; README.md
+git init
+git add README.md
+git commit -m &quot;first commit&quot;
+git remote add origin https://github.com/rangwei/heroku01.git
+git push -u origin master
+</code></pre><h2 id="安装heroku命令工具和部署">安装Heroku命令工具和部署</h2>
+<ol>
+<li>在Mac下安装heroku命令工具：</li>
+</ol>
+<pre><code>brew install heroku/brew/heroku
+</code></pre><ol start="2">
+<li>登录heroku：</li>
+</ol>
+<pre><code>heroku login
+</code></pre><ol start="3">
+<li>创建一个应用:</li>
+</ol>
+<pre><code>heroku create
+</code></pre><p>很快就可以看到创建完毕，输出信息包含了app名称、应用地址以及代码地址：</p>
+<pre><code>Creating app... done, ⬢ damp-temple-40624
+https://damp-temple-40624.herokuapp.com/ | https://git.heroku.com/damp-temple-40624.git
+</code></pre><ol start="4">
+<li>同步代码到heroku:</li>
+</ol>
+<pre><code>git push https://git.heroku.com/damp-temple-40624.git
+</code></pre><p>然后就是自动上传代码编译运行，输出如下：</p>
+<pre><code>Enumerating objects: 8, done.
+Counting objects: 100% (8/8), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (8/8), 5.16 KiB | 5.16 MiB/s, done.
+Total 8 (delta 0), reused 0 (delta 0)
+remote: Compressing source files... done.
+remote: Building source:
+remote: 
+remote: -----&gt; Node.js app detected
+remote:        
+remote: -----&gt; Creating runtime environment
+remote:        
+remote:        NPM_CONFIG_LOGLEVEL=error
+remote:        NODE_ENV=production
+remote:        NODE_MODULES_CACHE=true
+remote:        NODE_VERBOSE=false
+remote:        
+remote: -----&gt; Installing binaries
+remote:        engines.node (package.json):  unspecified
+remote:        engines.npm (package.json):   unspecified (use default)
+remote:        
+remote:        Resolving node version 12.x...
+remote:        Downloading and installing node 12.15.0...
+remote:        Using default npm version: 6.13.4
+remote:        
+remote: -----&gt; Installing dependencies
+remote:        Installing node modules (package.json + package-lock)
+remote:        added 50 packages from 37 contributors and audited 126 packages in 1.68s
+remote:        found 0 vulnerabilities
+remote:        
+remote:        
+remote: -----&gt; Build
+remote:        
+remote: -----&gt; Caching build
+remote:        - node_modules
+remote:        
+remote: -----&gt; Pruning devDependencies
+remote:        audited 126 packages in 0.98s
+remote:        found 0 vulnerabilities
+remote:        
+remote:        
+remote: -----&gt; Build succeeded!
+remote: -----&gt; Discovering process types
+remote:        Procfile declares types     -&gt; (none)
+remote:        Default types for buildpack -&gt; web
+remote: 
+remote: -----&gt; Compressing...
+remote:        Done: 22.4M
+remote: -----&gt; Launching...
+remote:        Released v3
+remote:        https://damp-temple-40624.herokuapp.com/ deployed to Heroku
+remote: 
+remote: Verifying deploy... done.
+To https://git.heroku.com/damp-temple-40624.git
+ * [new branch]      master -&gt; master
+</code></pre><h2 id="测试云服务">测试云服务</h2>
+<p>可以通过命令打开网址：</p>
+<pre><code>heroku open -a damp-temple-40624
+</code></pre><p>打开浏览器，这个Node.js服务在短短几分钟实践里就上云了：</p>
+<p><a href="https://damp-temple-40624.herokuapp.com/user">https://damp-temple-40624.herokuapp.com/user</a></p>
+<h2 id="小结">小结</h2>
+<p>Heroku是一个很不错的paas服务，除了Node.js也支持其它的技术栈，大家有空也可以尝试一下。</p>
+<h2 id="项目代码">项目代码</h2>
+<ul>
+<li><a href="https://github.com/rangwei/nodejs-blogs/tree/master/a10">nodejs-blogs/a10</a></li>
+</ul>
+<h2 id="参考阅读">参考阅读</h2>
+<p><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">https://devcenter.heroku.com/articles/getting-started-with-nodejs</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

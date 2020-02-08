@@ -6,10 +6,121 @@
     <description>Recent content in Posts on My New Node.js Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 08 Feb 2020 15:39:31 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 08 Feb 2020 16:43:39 +0800</lastBuildDate>
     
 	<atom:link href="https://whispering-coast-84700.herokuapp.com/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Nodejs学习笔记10 将Node应用上云 Heroku</title>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B010-%E5%B0%86node%E5%BA%94%E7%94%A8%E4%B8%8A%E4%BA%91-heroku/</link>
+      <pubDate>Sat, 08 Feb 2020 16:43:39 +0800</pubDate>
+      
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B010-%E5%B0%86node%E5%BA%94%E7%94%A8%E4%B8%8A%E4%BA%91-heroku/</guid>
+      <description>将Node.js应用上云(heroku) 阅读这篇blog大约需要10分钟
+前面学习了Node.js开发的基本概念。 也了解了最流行的虚拟化技术Docker本地部署的方法。
+今天尝试一下把Node REST API服务上云。用一个很简单但是又非常先进的方法，那就是heroku。网址：www.heroku.com
+Heroku是一个支持多种编程语言的云平台即服务。在2010年被Salesforce.com收购。Heroku作为最开始的云平台之一，从2007年6月起开发，当时它仅支持Ruby，但后来增加了对Java、Node.js、Scala、Clojure、Python以及（未记录在正式文件上）PHP和Perl的支持。
+业界有很多云平台（PaaS），SAP也提供了SAP云平台,可以提升企业级开发创新能力。PaaS为开发者提供了很多便利的服务，屏蔽了IaaS的复杂操作，能够让开发人员最短的时间内专注于业务，进行创新。
+选择Heroku，主要是它提供了一些免费的服务，可以把相对简单的服务/app/网站快速上云，然后也可以对比一下它和SAP云平台的差异。
+ Good code is its own best documentation. As you’re about to add a comment, ask yourself, “How can I improve the code so that this comment isn’t needed?” &amp;ndash;Steve McConnell
+ 主要通过以下简单的几个步骤，就可以快速把服务上云：
+ 准备工作 Node.js项目准备 上传到GitHub 安装Heroku命令工具和部署 测试云服务  准备工作  Git  电脑上需要安装git，并熟悉git的基本操作
+ Heroku  首先需要注册一个账号。推荐通过Gmail注册即可，立即生效。
+Node.js项目准备 借用上一个项目的代码。很简单的通过JSON返回一个用户的数据。
+稍微做一下小小的调整：修改端口号的代码。
+server.js:
+const data = require(&#39;./data&#39;); const express = require(&#39;express&#39;); const PORT = process.</description>
+    </item>
+    
+    <item>
+      <title>Nodejs学习笔记9 将Node应用部署到Docker</title>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B09-%E5%B0%86node%E5%BA%94%E7%94%A8%E9%83%A8%E7%BD%B2%E5%88%B0docker/</link>
+      <pubDate>Sat, 08 Feb 2020 16:42:57 +0800</pubDate>
+      
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B09-%E5%B0%86node%E5%BA%94%E7%94%A8%E9%83%A8%E7%BD%B2%E5%88%B0docker/</guid>
+      <description>将Node应用部署到Docker 阅读这篇blog大约需要10分钟
+Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源。
+Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。
+Docker的优点:
+ 快速一致地交付应用。 响应式部署和扩展。 在同一硬件上运行更多工作负载。   Good code is short, simple, and symmetrical—the challenge is figuring out how to get there. &amp;ndash;Sean Parent
+ 介绍 Node.js本身就是一个快速构建应用的环境，和Docker可以完美地搭配。主要内容包括两部分：
+ 通过Express创建一个简单的REST应用 将服务部署到Docker  通过Express创建一个简单的REST应用  准备  mkdir a09 npm init -y npm install express --save 创建一个data.json:
+{&amp;quot;name&amp;quot;: &amp;quot;Hello&amp;quot;, &amp;quot;likes&amp;quot;: [&amp;quot;wolrd&amp;quot;, &amp;quot;node&amp;quot;]}  服务器代码  server.js
+const data = require(&#39;.</description>
+    </item>
+    
+    <item>
+      <title>Nodejs学习笔记8 Fibonacci运算,</title>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B08-fibonacci%E8%BF%90%E7%AE%97-%E7%94%A8promise%E6%9D%A5%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0/</link>
+      <pubDate>Sat, 08 Feb 2020 16:41:27 +0800</pubDate>
+      
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B08-fibonacci%E8%BF%90%E7%AE%97-%E7%94%A8promise%E6%9D%A5%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0/</guid>
+      <description>fibonacci运算, 用promise来调用函数 阅读这篇blog大约需要10分钟
+Node.js有很丰富的生态，有很多有点，其最大的特点就是善于I/O，不善于计算。
+今天主要看一下对于大量计算的任务，node.js的表现。然后再对promise做一些补充学习。
+ Any fool can write code that a computer can understand. Good programmers write code that humans can understand. &amp;ndash; Martin Fowler
+ 介绍 主要包含这些内容：
+ fibonacci运算 util.promisify 标准模块的promise用法  fibonacci运算 1.介绍
+斐波那契数列（Fibonacci sequence），又称黄金分割数列、因数学家列昂纳多·斐波那契（Leonardoda Fibonacci）以兔子繁殖为例子而引入，故又称为“兔子数列”，指的是这样一个数列：1、1、2、3、5、8、13、21、34、……
+这是一个非常消耗CPU的运算。
+2.测试
+通过Node服务器来计算fibonacci，然后运行后看看效果。
+server.js:
+const http = require(&#39;http&#39;); const url = require(&#39;url&#39;); const fibonacci = n =&amp;gt; { if (n === 1 || n === 2) return 1; else return fibonacci(n-1) + fibonacci(n-2); } http.</description>
+    </item>
+    
+    <item>
+      <title>Nodejs学习笔记7 服务器编程</title>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Sat, 08 Feb 2020 16:41:11 +0800</pubDate>
+      
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B/</guid>
+      <description>服务器编程 阅读这篇blog大约需要5分钟
+传统的后端语言有java, php等，如今Node.js也凭借其强大的JS，广泛的生态，非阻塞I/O，高并发的特性，占据了一席之地。今天快速学习了解一下Node服务器编程。
+ Hello Node HTTP Hello Express   KISS: Keep it simple and stupid.
+ 介绍 通过几个小例子来感受一下Node服务器的极简风格:
+ 安装nodemon 最简单的http服务器 Hello Express  安装nodemon npm install nodemon -g
+nodemon是一个非常有用的小工具。每次只要修改完代码，都需要手工重新运行程序。有了nodemon以后，它能够自动监测代码如果有变化就会自动重启运行。
+最简单的http服务器 通过Node的标准HTTP模块用一句话就能构建一个简单的服务器：
+app.js:
+const http = require(&#39;http&#39;); http.createServer(function (req, res) { res.writeHead(200, { &#39;Content-Type&#39;: &#39;text/plain&#39; }); res.end(&#39;Hello, World!\n&#39;); }).listen(3000, &#39;127.0.0.1&#39;); console.log(&#39;Server running at http://127.0.0.1:3000&#39;); 通过nodemon 运行:
+nodemon app.js Hello Express  介绍  Express 是一个保持最小规模的灵活的 Node.js Web 应用程序开发框架,为 Web 和移动应用程序提供一组强大的功能。</description>
+    </item>
+    
+    <item>
+      <title>Nodejs学习笔记6 网络请求和API调用</title>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06-%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%92%8Capi%E8%B0%83%E7%94%A8/</link>
+      <pubDate>Sat, 08 Feb 2020 16:40:53 +0800</pubDate>
+      
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06-%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%92%8Capi%E8%B0%83%E7%94%A8/</guid>
+      <description>网络请求和API调用 阅读这篇blog大约需要10分钟
+网络编程是非常重要的一块内容，JS作为web开发最紧密的一部分，在网络编程方面本来就是很强大的，然后Node生态也提供了各种便利的工具来发送和接收网络请求。
+我们最基本的工具是Request模块，然后第三方也提供基于Promise的工具，常用的有axios,node-fetch等。
+ Request axios node-fetch   Resources for developers, by developers.
+ 介绍 先通过几个小例子来coding体验一下不同：
+ Request Web RESTful API axios node-fetch  Request  介绍 Request是一个超级简单使用的HTTP Client工具。 它的目标是通过最简单的方法来发送http请求。  安装Request模块:
+npm install request --save 最基本的用法：  var req = require(&#39;request&#39;); req(&#39;http://www.bing.com&#39;, function(error, response, body){ if (!error &amp;amp;&amp;amp; response.statusCode == 200) { console.log(body) // Show the HTML for the baidu homepage. } }); Request通过callback来异步传输数据，现在有很多其它更强大的工具来帮助完成工作。
+Web RESTful API  RESTful  rest是REpresentational State Transfer三个单词的缩写，由Roy Fielding于2000年论文中提出，它代表着分布式服务的架构风格。</description>
+    </item>
+    
+    <item>
+      <title>Nodejs学习笔记5 异步编程</title>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05-%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Sat, 08 Feb 2020 16:40:31 +0800</pubDate>
+      
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05-%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/</guid>
+      <description>异步编程 阅读这篇blog大约需要10分钟
+Node.js的关键词就是异步、非阻塞、事件、单线程。所以理解并熟练掌握异步编程非常重要:
+ callback概念 Promise aysnc/await   “Write code that is easy to delete, not easy to extend.” —Tef, Programming is Terrible
+ 介绍 今天的主要内容其实都是JavaScript的语法：
+ 最简单的异步函数 callback Promise aysnc/await 小结  最简单的异步函数 首先来看一个最简单的异步函数，用setTimeout()来模拟一个两秒的操作：
+aysnc-simple.js:
+console.log(&#39;Starting app&#39;); setTimeout(()=&amp;gt;{ console.log(&#39;hello!&#39;); }, 2000); //异步操作 console.log(&#39;Finish app&#39;); 代码输出:
+Starting app Finish app hello! 可以看到代码是非阻塞的，异步操作会放到一个callback队列中，后面的代码会继续执行。
+callback 在前面的小例子中，其实已经接触了不少关于callback的用法，文件读写操作都用了异步callback的方式来完成。这里看一个最简单的callback写法：(callback.js)
+const getUser = (id, callback) =&amp;gt; { const user = {id, name: &#39;mockname&#39;}; callback(user); }; getUser(123, user =&amp;gt; {console.</description>
+    </item>
     
     <item>
       <title>Nodejs学习笔记4 完善删除 读取 列表功能</title>

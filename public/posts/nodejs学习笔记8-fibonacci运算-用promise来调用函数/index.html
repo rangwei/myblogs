@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.64.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nodejs学习笔记8 Fibonacci运算, &middot; My New Node.js Site</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://whispering-coast-84700.herokuapp.com/"><h1>My New Node.js Site</h1></a>
+      <p class="lead">
+       This is my learning notes for Node.js 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://whispering-coast-84700.herokuapp.com/">Home</a> </li>
+        <li><a href="https://github.com/rangwei/"> Github </a></li><li><a href="https://www.linkedin.com/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2020. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nodejs学习笔记8 Fibonacci运算,</h1>
+  <time datetime=2020-02-08T16:41:27&#43;0800 class="post-date">Sat, Feb 8, 2020</time>
+  <h1 id="fibonacci运算-用promise来调用函数">fibonacci运算, 用promise来调用函数</h1>
+<p><em>阅读这篇blog大约需要10分钟</em></p>
+<p>Node.js有很丰富的生态，有很多有点，其最大的特点就是善于I/O，不善于计算。</p>
+<p>今天主要看一下对于大量计算的任务，node.js的表现。然后再对promise做一些补充学习。</p>
+<blockquote>
+<p>Any fool can write code that a computer can understand. Good programmers write code that humans can understand. &ndash; Martin Fowler</p>
+</blockquote>
+<h2 id="介绍">介绍</h2>
+<p>主要包含这些内容：</p>
+<ul>
+<li>fibonacci运算</li>
+<li>util.promisify</li>
+<li>标准模块的promise用法</li>
+</ul>
+<h2 id="fibonacci运算">fibonacci运算</h2>
+<p>1.介绍</p>
+<p>斐波那契数列（Fibonacci sequence），又称黄金分割数列、因数学家列昂纳多·斐波那契（Leonardoda Fibonacci）以兔子繁殖为例子而引入，故又称为“兔子数列”，指的是这样一个数列：1、1、2、3、5、8、13、21、34、……</p>
+<p>这是一个非常消耗CPU的运算。</p>
+<p>2.测试</p>
+<p>通过Node服务器来计算fibonacci，然后运行后看看效果。</p>
+<p>server.js:</p>
+<pre><code>const http = require('http');
+const url = require('url');
+
+const fibonacci = n =&gt; { 
+    if (n === 1 || n === 2) return 1; 
+    else return fibonacci(n-1) + fibonacci(n-2); 
+}
+
+http.createServer(
+    (req, res) =&gt; {
+        const urlP = url.parse(req.url, true);
+        let fibo;
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        if (urlP.query['n']) {
+            fibo = fibonacci(urlP.query['n']);
+            res.end(`Fibonacci ${urlP.query['n']} = ${fibo}`);
+        }else {
+            res.end('USAGE: http://localhost:8124?n=##');
+        }
+    }
+).listen(8124, 'localhost');
+
+console.log('Server is running');
+
+</code></pre><p>可以分别在浏览器输入一些数字来测试：</p>
+<pre><code>http://localhost:8124?n=10
+
+http://localhost:8124?n=20
+
+http://localhost:8124?n=40
+
+http://localhost:8124?n=80
+</code></pre>
+<p>会发现响应逐渐变慢，电脑的CPU很高，然后其它请求也会得不到回应，这是因为Node.js是单线程的。它的优势是I/O非阻塞，但是对于CPU计算多的任务，Node就不适合了。</p>
+<p>有一些改进的办法，比如新开线程、对算法进行优化，但是个人觉得还是应该在设计上去避免，尽量发挥Node的强项避免它的弱项</p>
+<h2 id="utilpromisify">util.promisify</h2>
+<p>ls.js:</p>
+<pre><code>const fs = require('fs');
+const util = require('util');
+
+const fs_readdir = util.promisify(fs.readdir);
+
+(async () =&gt; {
+    const files = await fs_readdir('.');
+    for (let fn of files) {
+        console.log(fn);
+    }
+})().catch(err =&gt; {console.log(err)});
+</code></pre><h2 id="promise-module">promise module</h2>
+<p>ls2-promise.js:</p>
+<pre><code>const fs = require('fs').promises;
+
+(async () =&gt; {
+    const files = await fs.readdir('.');
+    for (let fn of files) {
+        console.log(fn);
+    }
+})().catch(err =&gt; {console.log(err)});
+</code></pre><h2 id="小结">小结</h2>
+<p>首先通过fibonacci计算的例子，可以看到Node的一些有意思的特性：单线程，对CPU计算高的任务并不擅长。可以尽量应用在那些高并发、I/O密集、少量业务逻辑的场景。</p>
+<p>对于一些常见的异步I/O操作，可以通过util.promisify的方法来转化为promise语法。另外现在node10以后很多标准模块都自带了对promise的支持。</p>
+<h2 id="项目代码">项目代码</h2>
+<ul>
+<li><a href="https://github.com/rangwei/nodejs-blogs/tree/master/a08">nodejs-blogs/a08</a></li>
+</ul>
+<h2 id="参考阅读">参考阅读</h2>
+<ul>
+<li><a href="https://exploringjs.com/es6/index.html#toc_ch_promises">https://exploringjs.com/es6/index.html#toc_ch_promises</a></li>
+<li><a href="https://brunoscopelliti.com/new-util-promisify-in-nodejs/">https://brunoscopelliti.com/new-util-promisify-in-nodejs/</a></li>
+<li><a href="https://nodejs.org/dist/latest-v12.x/docs/api/fs.html">https://nodejs.org/dist/latest-v12.x/docs/api/fs.html</a></li>
+</ul>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

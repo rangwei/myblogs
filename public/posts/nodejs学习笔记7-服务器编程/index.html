@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.64.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nodejs学习笔记7 服务器编程 &middot; My New Node.js Site</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://whispering-coast-84700.herokuapp.com/"><h1>My New Node.js Site</h1></a>
+      <p class="lead">
+       This is my learning notes for Node.js 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://whispering-coast-84700.herokuapp.com/">Home</a> </li>
+        <li><a href="https://github.com/rangwei/"> Github </a></li><li><a href="https://www.linkedin.com/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2020. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nodejs学习笔记7 服务器编程</h1>
+  <time datetime=2020-02-08T16:41:11&#43;0800 class="post-date">Sat, Feb 8, 2020</time>
+  <h1 id="服务器编程">服务器编程</h1>
+<p><em>阅读这篇blog大约需要5分钟</em></p>
+<p>传统的后端语言有java, php等，如今Node.js也凭借其强大的JS，广泛的生态，非阻塞I/O，高并发的特性，占据了一席之地。今天快速学习了解一下Node服务器编程。</p>
+<ul>
+<li>Hello Node HTTP</li>
+<li>Hello Express</li>
+</ul>
+<blockquote>
+<p>KISS: Keep it simple and stupid.</p>
+</blockquote>
+<h2 id="介绍">介绍</h2>
+<p>通过几个小例子来感受一下Node服务器的极简风格:</p>
+<ol>
+<li>安装nodemon</li>
+<li>最简单的http服务器</li>
+<li>Hello Express</li>
+</ol>
+<h2 id="安装nodemon">安装nodemon</h2>
+<p>npm install nodemon -g</p>
+<p>nodemon是一个非常有用的小工具。每次只要修改完代码，都需要手工重新运行程序。有了nodemon以后，它能够自动监测代码如果有变化就会自动重启运行。</p>
+<h2 id="最简单的http服务器">最简单的http服务器</h2>
+<p>通过Node的标准HTTP模块用一句话就能构建一个简单的服务器：</p>
+<p>app.js:</p>
+<pre><code>const http = require('http');
+
+http.createServer(function (req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello, World!\n');
+}).listen(3000, '127.0.0.1');
+
+console.log('Server running at http://127.0.0.1:3000');
+</code></pre><p>通过nodemon 运行:</p>
+<pre><code>nodemon app.js
+</code></pre><h2 id="hello-express">Hello Express</h2>
+<ol>
+<li>介绍</li>
+</ol>
+<p>Express 是一个保持最小规模的灵活的 Node.js Web 应用程序开发框架,为 Web 和移动应用程序提供一组强大的功能。</p>
+<ol start="2">
+<li>为项目安装Express模块</li>
+</ol>
+<pre><code>npm init -y
+
+npm install express --save
+</code></pre><ol start="3">
+<li>示例</li>
+</ol>
+<p>server.js:</p>
+<pre><code>const express = require('express');
+
+const app = express();
+
+app.get('/', (req, res) =&gt; {
+    res.send('Hello Express!');
+});
+
+app.listen(3000);
+</code></pre><p>nodemon server.js</p>
+<p>可以通过浏览器访问测试:</p>
+<pre><code>http://localhost:3000
+</code></pre>
+<p>让express返回html:</p>
+<pre><code>const express = require('express');
+
+const app = express();
+
+app.get('/', (req, res) =&gt; {
+    res.send('&lt;h1&gt;Hello Express!&lt;/h1&gt;');
+});
+
+app.listen(3000);
+</code></pre><h2 id="小结">小结</h2>
+<p>node程序不仅代码非常简单，而且消耗资源很少，支持高并发。这是它非常大的优势。</p>
+<p>但是每一种语言和环境都有自己的优势和劣势。如果大量CPU计算的任务，node就不太适合了。下次我们可以看看这一点。</p>
+<h2 id="项目代码">项目代码</h2>
+<ul>
+<li><a href="https://github.com/rangwei/nodejs-blogs/tree/master/a07">nodejs-blogs/a07</a></li>
+</ul>
+<h2 id="参考阅读">参考阅读</h2>
+<ul>
+<li><a href="http://www.expressjs.com.cn">http://www.expressjs.com.cn</a></li>
+<li><a href="http://expressjs.com">http://expressjs.com</a></li>
+</ul>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.64.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nodejs学习笔记5 异步编程 &middot; My New Node.js Site</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://whispering-coast-84700.herokuapp.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class="theme-base-08 ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://whispering-coast-84700.herokuapp.com/"><h1>My New Node.js Site</h1></a>
+      <p class="lead">
+       This is my learning notes for Node.js 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://whispering-coast-84700.herokuapp.com/">Home</a> </li>
+        <li><a href="https://github.com/rangwei/"> Github </a></li><li><a href="https://www.linkedin.com/"> LinkedIn </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2020. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Nodejs学习笔记5 异步编程</h1>
+  <time datetime=2020-02-08T16:40:31&#43;0800 class="post-date">Sat, Feb 8, 2020</time>
+  <h1 id="异步编程">异步编程</h1>
+<p><em>阅读这篇blog大约需要10分钟</em></p>
+<p>Node.js的关键词就是异步、非阻塞、事件、单线程。所以理解并熟练掌握异步编程非常重要:</p>
+<ul>
+<li>callback概念</li>
+<li>Promise</li>
+<li>aysnc/await</li>
+</ul>
+<blockquote>
+<p>“Write code that is easy to delete, not easy to extend.”
+—Tef, Programming is Terrible</p>
+</blockquote>
+<h2 id="介绍">介绍</h2>
+<p>今天的主要内容其实都是JavaScript的语法：</p>
+<ol>
+<li>最简单的异步函数</li>
+<li>callback</li>
+<li>Promise</li>
+<li>aysnc/await</li>
+<li>小结</li>
+</ol>
+<h2 id="最简单的异步函数">最简单的异步函数</h2>
+<p>首先来看一个最简单的异步函数，用setTimeout()来模拟一个两秒的操作：</p>
+<p>aysnc-simple.js:</p>
+<pre><code>console.log('Starting app');
+
+setTimeout(()=&gt;{
+    console.log('hello!');
+}, 2000); //异步操作
+
+console.log('Finish app');
+</code></pre><p>代码输出:</p>
+<pre><code>Starting app
+Finish app
+hello!
+</code></pre><p>可以看到代码是非阻塞的，异步操作会放到一个callback队列中，后面的代码会继续执行。</p>
+<h2 id="callback">callback</h2>
+<p>在前面的小例子中，其实已经接触了不少关于callback的用法，文件读写操作都用了异步callback的方式来完成。这里看一个最简单的callback写法：(callback.js)</p>
+<pre><code>const getUser = (id, callback) =&gt; {
+    const user = {id, name: 'mockname'};
+    callback(user);
+};
+
+getUser(123, user =&gt; {console.log(user)});
+</code></pre><p>首先创建了一个getUser函数，它用来模拟获取用户的数据，然后通过callback返回结果。</p>
+<p>调用getUser需要传递两个参数，分别是用户id和一个callback函数。</p>
+<p>代码输出：</p>
+<pre><code>{ id: 123, name: 'mockname' }
+</code></pre><h2 id="promise">Promise</h2>
+<p>callback的编程方式如果用的太多会造成代码嵌套太多，代码维护困难。于是有了Promise的设计。</p>
+<p>可以通过promise.then(&hellip;)这种写法来执行异步代码，多个异步代码可以通过promise链的形式。</p>
+<p>一个简单的Promise例子:(promise.js)</p>
+<pre><code>let promise = new Promise((resolve, reject) =&gt; {
+    setTimeout(() =&gt; resolve(&quot;done!&quot;), 1000);
+  });
+  
+promise.then(result =&gt; console.log(result), error =&gt; console.log(error));
+
+</code></pre><p>这里传递给promise的函数是一个异步代码，如果代码正常运行后，那么会把结果放入result这个变量。在promise后面的then()里可以获取。</p>
+<p>现在看一个更有意思的Promise链，链条里都是异步方法，它们会依次按顺序执行:(promise-chain.js)</p>
+<pre><code>new Promise((resolve, reject) =&gt; {
+    setTimeout(() =&gt; resolve(1), 1000);
+}).then(
+    result =&gt; {
+        console.log(result); //1
+        return new Promise(
+            (resolve, reject) =&gt; {
+                setTimeout(() =&gt; resolve(result * 2), 1000);
+            }
+        );
+    }
+).then(
+    result =&gt; {
+        console.log(result);//2
+        return new Promise(
+            (resolve, reject) =&gt; {
+                setTimeout(() =&gt; resolve(result * 2), 1000);
+            }
+        );
+    }
+).then(
+    result =&gt; {
+        console.log(result);//4
+        return new Promise(
+            (resolve, reject) =&gt; {
+                setTimeout(() =&gt; resolve(result * 2), 1000);
+            }
+        );
+    }
+);
+</code></pre><p>代码输出：</p>
+<pre><code>1
+2
+4
+</code></pre><h2 id="aysncawait">aysnc/await</h2>
+<p>aysnc/await其实也是在使用promise，但是一种更加简单的语法。通过aysnc/await关键字，可以让异步代码看起来像同步代码一样。</p>
+<p>示例:(aysnc.js)</p>
+<pre><code>async function f() {
+    let promise = new Promise((resolve, reject) =&gt; {
+        setTimeout(() =&gt; resolve(&quot;done!&quot;), 1000)
+      });
+
+    let result = await promise;//代码会等待执行完毕
+
+    console.log(result);
+    
+}
+</code></pre><p>在这里添加await关键字以后，代码会等待执行完毕才继续。注意await只能在aync方法里执行。如果想在主程序里使用await的话，可以把它放到一个匿名函数里，就像这样：</p>
+<pre><code>(async() =&gt; {
+    await new Promise((resolve, reject) =&gt; setTimeout(resolve, 3000));
+    console.log('after 3 s done.');
+})();
+</code></pre><h2 id="小结">小结</h2>
+<p>也有很多第三方库来帮助我们通过promise的方式来编写代码。</p>
+<p>对于简单的情况，直接使用callback也是很直接的，但是在一些复杂的比如涉及多个异步操作的时候，通过最新的async/await方式会让代码看起来极其简单。</p>
+<p>接下来我把这些概念通过网络请求代码的方式来实践一下。</p>
+<h2 id="项目代码">项目代码</h2>
+<p><a href="https://github.com/rangwei/nodejs-blogs/tree/master/a05">nodejs-blogs/a05</a></p>
+<h2 id="参考阅读">参考阅读</h2>
+<ul>
+<li><a href="https://zh.javascript.info/async">JavaSciprt现代教程: Promise, async/await</a></li>
+</ul>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>
