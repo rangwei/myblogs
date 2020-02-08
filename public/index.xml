@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>My New Node.js Site</title>
-    <link>http://localhost:3000/</link>
+    <link>https://whispering-coast-84700.herokuapp.com/</link>
     <description>Recent content on My New Node.js Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 08 Feb 2020 15:39:31 +0800</lastBuildDate>
     
-	<atom:link href="http://localhost:3000/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://whispering-coast-84700.herokuapp.com/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Nodejs学习笔记4 完善删除 读取 列表功能</title>
-      <link>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-%E5%AE%8C%E5%96%84%E5%88%A0%E9%99%A4-%E8%AF%BB%E5%8F%96-%E5%88%97%E8%A1%A8%E5%8A%9F%E8%83%BD/</link>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-%E5%AE%8C%E5%96%84%E5%88%A0%E9%99%A4-%E8%AF%BB%E5%8F%96-%E5%88%97%E8%A1%A8%E5%8A%9F%E8%83%BD/</link>
       <pubDate>Sat, 08 Feb 2020 15:39:31 +0800</pubDate>
       
-      <guid>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-%E5%AE%8C%E5%96%84%E5%88%A0%E9%99%A4-%E8%AF%BB%E5%8F%96-%E5%88%97%E8%A1%A8%E5%8A%9F%E8%83%BD/</guid>
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-%E5%AE%8C%E5%96%84%E5%88%A0%E9%99%A4-%E8%AF%BB%E5%8F%96-%E5%88%97%E8%A1%A8%E5%8A%9F%E8%83%BD/</guid>
       <description>完善删除、读取、列表功能 阅读这篇blog大概需要10分钟
 之前通过文件操作，实现了最基本的增加一个Note的功能，下面会继续完善这个小例子，增加删除、读取、列表功能。
  数组的filter。 通过callback来设计函数。   “People think that computer science is the art of geniuses but the actual reality is the opposite, just many people doing things that build on each other, like a wall of mini stones.” —Donald Knuth
@@ -29,10 +29,10 @@ const duplicateNote = notes.filter( note =&amp;gt; note.title === title ); if (d
     
     <item>
       <title>Nodejs学习笔记3 通过JSON格式保存对象</title>
-      <link>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-%E9%80%9A%E8%BF%87json%E6%A0%BC%E5%BC%8F%E4%BF%9D%E5%AD%98%E5%AF%B9%E8%B1%A1/</link>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-%E9%80%9A%E8%BF%87json%E6%A0%BC%E5%BC%8F%E4%BF%9D%E5%AD%98%E5%AF%B9%E8%B1%A1/</link>
       <pubDate>Sat, 08 Feb 2020 15:39:05 +0800</pubDate>
       
-      <guid>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-%E9%80%9A%E8%BF%87json%E6%A0%BC%E5%BC%8F%E4%BF%9D%E5%AD%98%E5%AF%B9%E8%B1%A1/</guid>
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-%E9%80%9A%E8%BF%87json%E6%A0%BC%E5%BC%8F%E4%BF%9D%E5%AD%98%E5%AF%B9%E8%B1%A1/</guid>
       <description>通过JSON格式保存对象 阅读这篇blog大概需要10分钟
 继续完善前面的小例子，通过命令参数来传递内容，并通过JSON格式来保存数据。
  通过第三方yargs包来处理参数 JSON格式操作   any application that can be written in JavaScript, will eventually be written in JavaScript. &amp;ndash; Atwood定律
@@ -47,10 +47,10 @@ Starting notes.js Starting app { _: [ &#39;add&#39; ], title: &#39;abc&#39;, &#3
     
     <item>
       <title>Nodejs学习笔记2 读写文件</title>
-      <link>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/</link>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/</link>
       <pubDate>Sat, 08 Feb 2020 15:38:49 +0800</pubDate>
       
-      <guid>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/</guid>
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/</guid>
       <description>读写文件功能 阅读这篇blog大概需要10分钟
 通过require来引入标准的模块功能来实现一些高级功能。
  如何读写文件 如何使用模块来组织代码   方法在JavaScript中属于一等公民，和字符串、数字等类型是完全一样的。可以通过变量传递。
@@ -68,10 +68,10 @@ Starting app Module { id: &#39;.&#39;, path: &#39;/Users/user/Documents/projects
     
     <item>
       <title>Nodejs学习笔记1 快速开始</title>
-      <link>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</link>
+      <link>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</link>
       <pubDate>Sat, 08 Feb 2020 15:38:24 +0800</pubDate>
       
-      <guid>http://localhost:3000/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</guid>
+      <guid>https://whispering-coast-84700.herokuapp.com/posts/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</guid>
       <description>快速开始 阅读这篇Blog大概需要5分钟
 Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境。 Node.js 使用了一个事件驱动、非阻塞式 I/O 的模型。
 对于云应用的快速开发，学习并熟练掌握Node已经是一项全栈开发工程师的必备技能。
