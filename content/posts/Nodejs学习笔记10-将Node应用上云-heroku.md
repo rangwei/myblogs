@@ -168,7 +168,7 @@ To https://git.heroku.com/damp-temple-40624.git
 ```
 heroku open -a damp-temple-40624
 ```
-打开浏览器，这个Node.js服务在短短几分钟实践里就上云了：
+打开浏览器，这个Node.js服务在短短几时间里就上云了：
 
 https://damp-temple-40624.herokuapp.com/user
 

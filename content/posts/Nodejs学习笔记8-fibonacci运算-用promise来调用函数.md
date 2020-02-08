@@ -77,6 +77,8 @@ console.log('Server is running');
 
 ## util.promisify
 
+Node.js生态大多数异步函数都是通过callback的方法来实现的。utilt提供了promisify方法来将传统的callback函数转化为promise写法，示例：
+
 ls.js:
 ```
 const fs = require('fs');
@@ -94,6 +96,7 @@ const fs_readdir = util.promisify(fs.readdir);
 
 
 ## promise module
+从Node10开始标准库也提供了promise版本，比如Filesystem，使用方法很简单，只要在引入的时候加上.promise即可，示例:
 
 ls2-promise.js:
 ```
